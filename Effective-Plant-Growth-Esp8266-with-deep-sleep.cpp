@@ -1,19 +1,23 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
-#include <Wire.h>
-#include <Adafruit_SleepyDog.h>
 
 const char* ssid = "your_SSID"; // Your Wi-Fi SSID
 const char* password = "your_PASSWORD"; // Your Wi-Fi password
 
 ESP8266WebServer server(80);
 
-const int sensorPin = A0; // Analog input pin that the sensor is attached to
+int moisturePin = A0; // Analog input pin that the moisture sensor is attached to
+int lightPin = A1; // Analog input pin that the light sensor is attached to
+
+// Define the sleep time in seconds (86400 seconds = 24 hours)
+const int sleepTime = 86400;
 
 void setup() {
-  Serial.begin(115200);
+  pinMode(moisturePin, INPUT);
+  pinMode(lightPin, INPUT);
+
+  Serial.begin(9600);
 
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
@@ -23,21 +27,27 @@ void setup() {
 
   Serial.println("Connected to WiFi");
 
-  MDNS.begin("esp8266");
-
   server.on("/", []() {
-    String json = "{\"moisture\":" + String(analogRead(sensorPin)) + "}";
+    int moistureValue = analogRead(moisturePin);
+    int lightValue = analogRead(lightPin);
+    String json = "{\"moisture\":" + String(moistureValue) + ",\"light\":" + String(lightValue) + "}";
     server.send(200, "application/json", json);
+    Serial.print("Moisture value: ");
+    Serial.println(moistureValue);
+    Serial.print("Light value: ");
+    Serial.println(lightValue);
   });
 
   server.begin();
-
   Serial.println("Server started");
 
-  ESP.deepSleep(24 * 60 * 60e6); // sleep for 24 hours
+  // Enter deep sleep mode for the specified sleep time
+  Serial.print("Entering deep sleep for ");
+  Serial.print(sleepTime);
+  Serial.println(" seconds");
+  ESP.deepSleep(sleepTime * 1000000);
 }
 
 void loop() {
-  // This code won't be executed since the ESP is in deep sleep mode
-  // and will only wake up after the specified time.
+  // This code will not be executed as the ESP8266 is in deep sleep mode
 }

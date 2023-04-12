@@ -7,10 +7,12 @@ const char* password = "your_PASSWORD"; // Your Wi-Fi password
 
 ESP8266WebServer server(80);
 
-int sensorPin = A0; // Analog input pin that the sensor is attached to
+int moisturePin = A0; // Analog input pin that the moisture sensor is attached to
+int lightPin = A1; // Analog input pin that the light sensor is attached to
 
 void setup() {
-  pinMode(sensorPin, INPUT);
+  pinMode(moisturePin, INPUT);
+  pinMode(lightPin, INPUT);
 
   Serial.begin(9600);
 
@@ -23,8 +25,14 @@ void setup() {
   Serial.println("Connected to WiFi");
 
   server.on("/", []() {
-    String json = "{\"moisture\":" + String(analogRead(sensorPin)) + "}";
+    int moistureValue = analogRead(moisturePin);
+    int lightValue = analogRead(lightPin);
+    String json = "{\"moisture\":" + String(moistureValue) + ",\"light\":" + String(lightValue) + "}";
     server.send(200, "application/json", json);
+    Serial.print("Moisture value: ");
+    Serial.println(moistureValue);
+    Serial.print("Light value: ");
+    Serial.println(lightValue);
   });
 
   server.begin();
