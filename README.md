@@ -1,6 +1,9 @@
 # Effective-Plant-Growth
 
 
+Effective-Plant-Growth-Esp8266
+Effective-Plant-Growth-Esp8266-with-deep-sleep "wake up every 24 hours makes a server with json and goes after that back to sleep"
+
 This program sets up a web server that listens on port 80 and responds to incoming HTTP requests with a JSON object that contains the moisture level of the soil as read by the sensor.
 
 You will need to replace your_SSID and your_PASSWORD with the credentials for your Wi-Fi network.
