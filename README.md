@@ -2,7 +2,7 @@
 
 
 ~Effective-Plant-Growth-Esp8266 "24/7 Online"<br>
-~Effective-Plant-Growth-Esp8266-with-deep-sleep "wake up every 24 hours makes a server with json and goes after that back to sleep"
+~Effective-Plant-Growth-Esp8266-with-deep-sleep "Every 24 hours, it wakes up, creates a server with JSON, and then goes back to sleep."
 
 This program sets up a web server that listens on port 80 and responds to incoming HTTP requests with a JSON object that contains the moisture level of the soil as read by the sensor.
 
