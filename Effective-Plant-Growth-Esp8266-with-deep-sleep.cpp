@@ -36,18 +36,15 @@ void setup() {
     Serial.println(moistureValue);
     Serial.print("Light value: ");
     Serial.println(lightValue);
+
+    // Schedule to enter deep sleep mode after sending the response
+    ESP.deepSleep(sleepTime * 1000000, WAKE_RF_DEFAULT);
   });
 
   server.begin();
   Serial.println("Server started");
-
-  // Enter deep sleep mode for the specified sleep time
-  Serial.print("Entering deep sleep for ");
-  Serial.print(sleepTime);
-  Serial.println(" seconds");
-  ESP.deepSleep(sleepTime * 1000000);
 }
 
 void loop() {
-  // This code will not be executed as the ESP8266 is in deep sleep mode
+  server.handleClient();
 }
